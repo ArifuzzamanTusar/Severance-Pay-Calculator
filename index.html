@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Severance Pay Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-xl font-semibold mb-4 text-center">Severance Pay Calculator</h2>
+        <form id="calculator-form" class="space-y-4">
+            <div>
+                <label class="block font-medium">Years of Service:</label>
+                <input type="number" id="years" class="w-full border p-2 rounded-md" required>
+            </div>
+            <div>
+                <label class="block font-medium">Age:</label>
+                <input type="number" id="age" class="w-full border p-2 rounded-md" required>
+            </div>
+            <div>
+                <label class="block font-medium">Annual Salary ($):</label>
+                <input type="number" id="salary" class="w-full border p-2 rounded-md" required>
+            </div>
+            <div>
+                <label class="block font-medium">Job Position:</label>
+                <select id="position" class="w-full border p-2 rounded-md">
+                    <option value="employee">Employee</option>
+                    <option value="manager">Manager</option>
+                </select>
+            </div>
+            <button type="button" onclick="calculateSeverance()"
+                class="w-full bg-blue-500 text-white py-2 rounded-md">Calculate</button>
+        </form>
+        <div id="result" class="mt-4 text-center text-lg font-semibold text-gray-700"></div>
+        <div class="bg-white pt-10  max-w-lg w-full">
+            <h2 class="text-xl font-semibold text-gray-800">Formula Example:</h2>
+            <p class="text-gray-600 mt-2">For an employee with <span class="font-semibold">10 years</span> of service, <span class="font-semibold">age 45</span>, and a <span class="font-semibold">$60,000</span> salary:</p>
+            <ul class="mt-4 space-y-2">
+                <li class="flex items-start"><span class="text-blue-600 mr-2">&#8226;</span> Severance = 3 weeks per year of service</li>
+                <li class="flex items-start"><span class="text-blue-600 mr-2">&#8226;</span> 10 years × 3 weeks = 30 weeks of severance</li>
+                <li class="flex items-start"><span class="text-blue-600 mr-2">&#8226;</span> (Salary ÷ 52) × Severance Weeks = $34,615.38 CAD</li>
+                <li class="flex items-start"><span class="text-blue-600 mr-2">&#8226;</span> For a manager or someone 50+, it may be 4 weeks per year or a 20% increase.</li>
+            </ul>
+        </div>
+    </div>
+
+
+
+    <script>
+        function calculateSeverance() {
+            let years = parseInt(document.getElementById("years").value) || 0;
+            let age = parseInt(document.getElementById("age").value) || 0;
+            let salary = parseFloat(document.getElementById("salary").value) || 0;
+            let position = document.getElementById("position").value;
+
+            if (years <= 0 || age <= 0 || salary <= 0) {
+                document.getElementById("result").innerText = "Please enter valid inputs.";
+                return;
+            }
+
+            let weeksPerYear = 3;
+            if (position === "manager" || age >= 50) {
+                weeksPerYear = Math.max(weeksPerYear, 4);
+            }
+
+            console.log(position);
+            console.log(weeksPerYear);
+
+
+            let severanceWeeks = years * weeksPerYear;
+            let weeklySalary = salary / 52;
+            let severancePay = weeklySalary * severanceWeeks;
+
+            document.getElementById("result").innerText = `Severance Pay: $${severancePay.toFixed(2)} CAD`;
+        }
+    </script>
+</body>
+
+</html>
